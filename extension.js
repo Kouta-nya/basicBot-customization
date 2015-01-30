@@ -16,7 +16,6 @@
         /*
          Extend the bot here, either by calling another function or here directly.
          Model code for a bot command:
-
          bot.commands.commandCommand = {
          command: 'cmd',
          rank: 'user/bouncer/mod/manager',
@@ -29,8 +28,55 @@
          }
          }
          }
-
          */
+		 
+		 rulesCommand: {
+                command: 'crules',
+                rank: 'user',
+                type: 'exact',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        if (typeof basicBot.settings.crulesLink === "string")
+                            return API.sendChat(subChat(basicBot.chat.roomrules, {link: basicBot.settings.crulesLink}));
+                    }
+                }
+            },
+			
+			rulesCommand2: {
+                command: 'srules',
+                rank: 'user',
+                type: 'exact',
+                functionality: function (chat, cmd) {
+                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
+                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
+                    else {
+                        if (typeof basicBot.settings.srulesLink === "string")
+                            return API.sendChat(subChat(basicBot.chat.roomrules, {link: basicBot.settings.srulesLink}));
+                    }
+                }
+            },
+		 
+		 
+		 
+		 intervalMessage2: function () {
+                var interval;
+                if (basicBot.settings.motdEnabled) interval = basicBot.settings.messageInterval2;
+                else interval = basicBot.settings.messageInterval2;
+                if ((basicBot.room.roomstats.songCount % interval) === 0 && basicBot.status) {
+                    var msg;
+                    if (basicBot.settings.motdEnabled) {
+                        msg = basicBot.settings.motd;
+                    }
+                    else {
+                        if (basicBot.settings.intervalMessages.length === 0) return void (0);
+                        var messageNumber = basicBot.room.roomstats.songCount % basicBot.settings.intervalMessages.length;
+                        msg = basicBot.settings.intervalMessages2[messageNumber];
+                    }
+                    API.sendChat(msg);
+                }
+		 },	
 
         bot.commands.baconCommand = {
             command: 'bacon',  //The command to be called. With the standard command literal this would be: !bacon
@@ -53,12 +99,12 @@
     //Change the bots default settings and make sure they are loaded on launch
 
     localStorage.setItem("basicBotsettings", JSON.stringify({
-        botName: "basicBot",
+        botName: "KamiBOT-san",
         language: "english",
-        chatLink: "https://rawgit.com/Yemasthui/basicBot/master/lang/en.json",
-        maximumAfk: 120,
+        chatLink: "http://dnamusic.8u.cz/web/KamiBOT-san/msg.json",
+        maximumAfk: 20,
         afkRemoval: true,
-        maximumDc: 60,
+        maximumDc: 120,
         bouncerPlus: true,
         lockdownEnabled: false,
         lockGuard: false,
@@ -66,11 +112,11 @@
         cycleGuard: true,
         maximumCycletime: 10,
         timeGuard: true,
-        maximumSongLength: 10,
+        maximumSongLength: 8,
         autodisable: true,
         commandCooldown: 30,
         usercommandsEnabled: true,
-        lockskipPosition: 3,
+        lockskipPosition: 2,
         lockskipReasons: [
             ["theme", "This song does not fit the room theme. "],
             ["op", "This song is on the OP list. "],
@@ -83,20 +129,33 @@
         afkpositionCheck: 15,
         afkRankCheck: "ambassador",
         motdEnabled: false,
-        motdInterval: 5,
+        motdInterval: 3,
         motd: "Temporary Message of the Day",
         filterChat: true,
         etaRestriction: false,
         welcome: true,
         opLink: null,
-        rulesLink: null,
+        crulesLink: http://bit.ly/dna-c-rules,
+		srulesLink: http://bit.ly/dna-s-rules,
         themeLink: null,
         fbLink: null,
         youtubeLink: null,
-        website: null,
-        intervalMessages: [],
+        website: http://dnamusic.8u.cz/,
+        intervalMessages: [
+		"Hey you! Did you see our web page? A big mistake! Check it out > http://dnamusic.8u.cz/",
+		"How are you people? I'm watching you all the time :)",
+		"Have you been disconnected? Jump to wait list and use *!dc* I'll put you to right place ;) ",
+		"Better speak English here. I would like to understand you too > . <",
+		"Don't forget to read our community rules > http://bit.ly/dna-c-rules ",
+		"We all are happy you are here with us. If you would like to know something, just ask ;)",
+		"Are you not sure if your song is allowed to play here? Check this > http://bit.ly/dna-s-rules",
+		"Did you notice me? I am here for you when you will disconnect. Just go back to wait list and write *!dc*",
+		"I'm customized version of *BasicBot* from Yemasthui made by Kouta-nya. Arigatou senpai ^^",
+		],
         messageInterval: 5,
-        songstats: true,
+		intervalMessages2:[],
+		messageInterval: 30,
+        songstats: false,
         commandLiteral: "!",
         blacklists: {
             NSFW: "https://rawgit.com/Yemasthui/basicBot-customization/master/blacklists/ExampleNSFWlist.json",

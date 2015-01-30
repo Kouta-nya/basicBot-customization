@@ -101,7 +101,7 @@
     localStorage.setItem("basicBotsettings", JSON.stringify({
         botName: "KamiBOT-san",
         language: "english",
-        chatLink: "http://dnamusic.8u.cz/web/KamiBOT-san/msg.json",
+        chatLink: "https://rawgit.com/Kouta-nya/basicBot-customization/blob/master/langIndex.json",
         maximumAfk: 20,
         afkRemoval: true,
         maximumDc: 120,
